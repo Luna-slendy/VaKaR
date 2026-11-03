@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 
 import AuthPage from "./AuthPage.jsx";
-import mascot from "./assets/blazy-mascot.gif";
+import mascot from "./assets/Blazy-mascot.gif";
 import { connectChatSocket } from "./services/socket.js";
 
 const THEMES = [
