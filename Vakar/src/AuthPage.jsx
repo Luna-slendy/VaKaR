@@ -1,10 +1,15 @@
-
 import { useState } from "react";
 
 import {
-  Eye, EyeOff, ArrowRight, ArrowLeft,
-  Mail, Lock, UserRound, Palette,
-  Check, ShieldCheck
+  Eye,
+  EyeOff,
+  ArrowRight,
+  Mail,
+  Lock,
+  UserRound,
+  Palette,
+  Check,
+  ShieldCheck
 } from "lucide-react";
 
 import mascot from "./assets/blazy-mascot.gif";
@@ -69,6 +74,12 @@ export default function AuthPage({
         return;
       }
 
+      if (form.username.trim().replace(/^@/, "").length < 3) {
+        setError("Username must contain at least 3 characters.");
+        setLoading(false);
+        return;
+      }
+
       if (form.password.length < 8) {
         setError("Your password must contain at least 8 characters.");
         setLoading(false);
@@ -112,7 +123,7 @@ export default function AuthPage({
 
     const account = accounts.find(
       item =>
-        item.email.toLowerCase() === email &&
+        item.email?.toLowerCase() === email &&
         item.password === form.password
     );
 
@@ -123,7 +134,6 @@ export default function AuthPage({
       return;
     }
 
-    // Allow the original demo profile to sign in.
     const existingUser = (() => {
       try {
         return JSON.parse(
@@ -136,7 +146,7 @@ export default function AuthPage({
 
     if (
       existingUser &&
-      existingUser.email.toLowerCase() === email
+      existingUser.email?.toLowerCase() === email
     ) {
       onLogin(existingUser);
       setLoading(false);
@@ -149,34 +159,31 @@ export default function AuthPage({
 
   return (
     <main className="auth-page">
-
-      {/* BACKGROUND DECORATION */}
       <div className="auth-decoration decoration-one" />
       <div className="auth-decoration decoration-two" />
 
-      {/* TOP NAVIGATION */}
       <header className="auth-header">
-
         <div className="auth-brand">
           <div className="auth-brand-icon">
             <img src={mascot} alt="Vakar mascot" />
           </div>
 
-          <span>vakar<span>.</span></span>
+          <span>
+            vakar<span>.</span>
+          </span>
         </div>
 
         <div className="auth-header-right">
-
           <div className="theme-picker-container">
             <button
               className="theme-picker-trigger"
-              onClick={() =>
-                setShowThemePicker(!showThemePicker)
-              }
+              onClick={() => setShowThemePicker(current => !current)}
               type="button"
+              aria-expanded={showThemePicker}
             >
               <Palette size={17} />
               <span>Appearance</span>
+
               <span
                 className="current-theme-dot"
                 style={{
@@ -213,9 +220,7 @@ export default function AuthPage({
 
                     <span>{item.name}</span>
 
-                    {theme === item.id && (
-                      <Check size={15} />
-                    )}
+                    {theme === item.id && <Check size={15} />}
                   </button>
                 ))}
               </div>
@@ -228,16 +233,11 @@ export default function AuthPage({
             <ShieldCheck size={16} />
             Secure space
           </span>
-
         </div>
       </header>
 
-      {/* AUTH CONTENT */}
       <section className="auth-content">
-
-        {/* LEFT SIDE */}
         <div className="auth-intro">
-
           <span className="auth-eyebrow">
             <span className="eyebrow-dot" />
             YOUR PERSONAL SPACE
@@ -256,8 +256,6 @@ export default function AuthPage({
           </p>
 
           <div className="mascot-container">
-            <div className="mascot-glow" />
-
             <img
               src={mascot}
               alt="Vakar mascot"
@@ -281,21 +279,16 @@ export default function AuthPage({
               Your own appearance
             </div>
           </div>
-
         </div>
 
-        {/* RIGHT SIDE */}
         <div className="auth-card">
-
           <div className="auth-card-heading">
             <span className="auth-card-eyebrow">
               {mode === "login" ? "WELCOME BACK" : "GET STARTED"}
             </span>
 
             <h2>
-              {mode === "login"
-                ? "Sign in"
-                : "Create account"}
+              {mode === "login" ? "Sign in" : "Create account"}
             </h2>
 
             <p>
@@ -324,26 +317,21 @@ export default function AuthPage({
           </div>
 
           {error && (
-            <div className="auth-message auth-error">
+            <div className="auth-message auth-error" role="alert">
               {error}
             </div>
           )}
 
           {success && (
-            <div className="auth-message auth-success">
+            <div className="auth-message auth-success" role="status">
               {success}
             </div>
           )}
 
-          <form
-            className="auth-form"
-            onSubmit={handleSubmit}
-          >
-
+          <form className="auth-form" onSubmit={handleSubmit}>
             {mode === "register" && (
               <>
                 <div className="auth-field-row">
-
                   <label className="auth-field">
                     <span>First name</span>
 
@@ -365,6 +353,8 @@ export default function AuthPage({
                     <span>Last name</span>
 
                     <div className="auth-input-wrapper">
+                      <UserRound size={17} />
+
                       <input
                         name="lastName"
                         value={form.lastName}
@@ -375,7 +365,6 @@ export default function AuthPage({
                       />
                     </div>
                   </label>
-
                 </div>
 
                 <label className="auth-field">
@@ -391,6 +380,7 @@ export default function AuthPage({
                       placeholder="your_username"
                       minLength={3}
                       maxLength={30}
+                      autoComplete="username"
                       required
                     />
                   </div>
@@ -439,13 +429,9 @@ export default function AuthPage({
                 <button
                   type="button"
                   className="password-toggle"
-                  onClick={() =>
-                    setShowPassword(!showPassword)
-                  }
+                  onClick={() => setShowPassword(current => !current)}
                   aria-label={
-                    showPassword
-                      ? "Hide password"
-                      : "Show password"
+                    showPassword ? "Hide password" : "Show password"
                   }
                 >
                   {showPassword
@@ -523,7 +509,6 @@ export default function AuthPage({
 
               {!loading && <ArrowRight size={18} />}
             </button>
-
           </form>
 
           <div className="auth-switch">
@@ -534,14 +519,10 @@ export default function AuthPage({
             <button
               type="button"
               onClick={() =>
-                switchMode(
-                  mode === "login" ? "register" : "login"
-                )
+                switchMode(mode === "login" ? "register" : "login")
               }
             >
-              {mode === "login"
-                ? "Create one"
-                : "Sign in"}
+              {mode === "login" ? "Create one" : "Sign in"}
             </button>
           </div>
 
@@ -549,16 +530,13 @@ export default function AuthPage({
             <ShieldCheck size={15} />
             Your personal space starts here.
           </div>
-
         </div>
       </section>
 
-      {/* FOOTER */}
       <footer className="auth-footer">
         <span>© {new Date().getFullYear()} Vakar</span>
         <span>Made for meaningful conversations.</span>
       </footer>
-
     </main>
   );
 }
