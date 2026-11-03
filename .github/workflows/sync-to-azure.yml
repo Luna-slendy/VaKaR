@@ -1,0 +1,50 @@
+name: Sync to Azure
+
+on:
+  push:
+    branches:
+      - "**"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: sync-azure-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Push branch to Azure
+        env:
+          AZURE_DEVOPS_PAT: ${{ secrets.AZURE_DEVOPS_PAT }}
+          SOURCE_BRANCH: ${{ github.ref_name }}
+          GIT_TERMINAL_PROMPT: "0"
+        shell: bash
+        run: |
+          set -euo pipefail
+          : "${AZURE_DEVOPS_PAT:?Missing AZURE_DEVOPS_PAT secret}"
+
+          case "$SOURCE_BRANCH" in
+            Vakar-Design) target="feature/site-design" ;;
+            Dmitrijs-Goncarovs) target="feature/pipeline" ;;
+            Stepan-hutorovs) target="feature/database" ;;
+            *) target="$SOURCE_BRANCH" ;;
+          esac
+
+          echo "Sync: $SOURCE_BRANCH -> $target"
+
+          auth=$(printf ':%s' "$AZURE_DEVOPS_PAT" | base64 -w0)
+          echo "::add-mask::$auth"
+
+          git -c http.extraheader="Authorization: Basic $auth" push \
+            "https://dev.azure.com/Our0PiA/VaKaR/_git/VaKaR" \
+            "HEAD:refs/heads/$target"
