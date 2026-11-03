@@ -7,7 +7,7 @@ import {
   Check, ShieldCheck
 } from "lucide-react";
 
-import mascot from "./assets/blazy-mascot.png";
+import mascot from "./assets/blazy-mascot.gif";
 
 export default function AuthPage({
   theme,
