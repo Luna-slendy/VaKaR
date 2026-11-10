@@ -7,3 +7,7 @@
 
 link:
 https://mango-bay-05b07d210.2.azurestaticapps.net/
+
+## Repozitoriju sinhronizācija
+
+[GitHub ↔ Azure Repos: iestatīšana un zaru atbilstība](docs/repository-sync.md)

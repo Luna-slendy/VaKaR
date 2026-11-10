@@ -1,29 +1,51 @@
 trigger:
-  - main
+  batch: true
+  branches:
+    include:
+      - '*'
 
 pool:
   vmImage: ubuntu-latest
 
-steps:
-  - checkout: self
+jobs:
+  - job: SyncToGitHub
+    displayName: 'Sync branch to GitHub'
+    condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/heads/'), ne(variables['Build.Reason'], 'PullRequest'))
+    timeoutInMinutes: 5
+    steps:
+      - checkout: self
+        fetchDepth: 0
+        persistCredentials: false
 
-  - task: NodeTool@0
-    inputs:
-      versionSpec: '22.x'
-    displayName: 'Install Node.js'
+      - bash: bash scripts/sync-branch.sh to-github
+        displayName: 'Push branch to GitHub'
+        env:
+          GITHUB_PAT: $(GITHUB_PAT)
+          SOURCE_REF: $(Build.SourceBranch)
 
-  - script: |
-      npm ci
-      npm run build
-    workingDirectory: '$(Build.SourcesDirectory)/Vakar'
-    displayName: 'Build frontend'
+  - job: BuildAndDeploy
+    displayName: 'Build and deploy frontend'
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'), ne(variables['Build.Reason'], 'PullRequest'))
+    steps:
+      - checkout: self
 
-  - task: AzureStaticWebApp@0
-    inputs:
-      app_location: 'Vakar/dist'
-      output_location: ''
-      api_location: ''
-      skip_app_build: true
-      skip_api_build: true
-      azure_static_web_apps_api_token: '$(deployment_token)'
-    displayName: 'Deploy frontend'
+      - task: NodeTool@0
+        inputs:
+          versionSpec: '22.x'
+        displayName: 'Install Node.js'
+
+      - script: |
+          npm ci
+          npm run build
+        workingDirectory: '$(Build.SourcesDirectory)/Vakar'
+        displayName: 'Build frontend'
+
+      - task: AzureStaticWebApp@0
+        inputs:
+          app_location: 'Vakar/dist'
+          output_location: ''
+          api_location: ''
+          skip_app_build: true
+          skip_api_build: true
+          azure_static_web_apps_api_token: '$(deployment_token)'
+        displayName: 'Deploy frontend'
