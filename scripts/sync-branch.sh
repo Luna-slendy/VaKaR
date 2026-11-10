@@ -49,7 +49,7 @@ case "$direction" in
   *) echo "Unknown sync direction: $direction" >&2; exit 1 ;;
 esac
 
-# Keep credentials out of remote URLs, command-line arguments and repository config.
+# Autentifikācijas datus neiekļauj attālo repozitoriju adresēs, komandas argumentos vai Git konfigurācijā.
 authenticated_git() {
   GIT_TERMINAL_PROMPT=0 \
   GIT_CONFIG_COUNT=1 \
@@ -64,23 +64,25 @@ echo "Sync: $source_branch -> $target_branch ($direction)"
 if authenticated_git ls-remote --exit-code "$target_url" "$target_ref" > /dev/null; then
   authenticated_git fetch --no-tags "$target_url" "$target_ref"
 
-  # A round trip or an older queued run must not create a commit or rewind a branch.
+  # Atpakaļsinhronizācija un vecāki uzdevumi nedrīkst veidot jaunus komitus vai atgriezt zaru iepriekšējā stāvoklī.
   if git merge-base --is-ancestor HEAD FETCH_HEAD; then
     echo 'Already synchronized: the target contains this commit.'
     exit 0
   fi
 
   if ! git merge-base --is-ancestor FETCH_HEAD HEAD; then
-    echo "Branches diverged: merge $source_branch with $target_branch before retrying sync." >&2
+    echo "Branches diverged ($direction): $source_branch -> $target_branch." >&2
+    echo "Target repository: $target_url" >&2
+    echo 'Fetch both repositories, merge the target branch into your source branch, resolve conflicts, and push the merge commit.' >&2
     exit 1
   fi
 else
   lookup_status=$?
-  # ls-remote returns 2 for a missing branch; authentication/network errors must fail.
+  # Ja zars neeksistē, ls-remote atgriež 2; autentifikācijas vai tīkla kļūdas pārtrauc izpildi.
   if [[ $lookup_status -ne 2 ]]; then
     exit "$lookup_status"
   fi
 fi
 
-# Normal pushes preserve history and reject conflicting concurrent updates.
+# Parasta nosūtīšana saglabā vēsturi un noraida konfliktējošus vienlaicīgus atjauninājumus.
 authenticated_git push "$target_url" "HEAD:$target_ref"

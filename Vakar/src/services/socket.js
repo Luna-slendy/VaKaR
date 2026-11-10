@@ -1,6 +1,6 @@
 /**
- * WebSocket placeholder. Call only after OAuth authentication is implemented.
- * Production URL should use wss://. The WebAPI should authenticate the connection.
+ * WebSocket sagatave. Jāizsauc tikai pēc OAuth autentifikācijas ieviešanas.
+ * Publicētajā vidē adresei jāizmanto wss://. WebAPI jānodrošina savienojuma autentifikācija.
  */
 export function connectChatSocket({ onMessage, onStatus } = {}) {
   const url = import.meta.env.VITE_WS_URL;

@@ -1,4 +1,4 @@
-"""Exercise the real sync script against local repositories; network is disabled."""
+"""Pārbauda sinhronizācijas skriptu lokālos repozitorijos; piekļuve tīklam ir atspējota."""
 
 import os
 from pathlib import Path
@@ -34,7 +34,7 @@ class SyncBranchTests(unittest.TestCase):
     def setUp(self):
         self.bash = find_bash()
         if not self.bash:
-            self.skipTest("Bash is required")
+            self.skipTest("Pārbaužu izpildei nepieciešams Bash")
         self.temporary = tempfile.TemporaryDirectory(prefix="vakar sync test ")
         self.addCleanup(self.temporary.cleanup)
         self.root = Path(self.temporary.name)
@@ -44,7 +44,7 @@ class SyncBranchTests(unittest.TestCase):
                     if not key.startswith("GIT_")}
         self.env.update(GIT_CONFIG_GLOBAL=os.devnull, GIT_CONFIG_NOSYSTEM="1")
         self.git("init", "-q", "--initial-branch=main")
-        self.git("config", "user.name", "Sync Test")
+        self.git("config", "user.name", "Sinhronizācijas pārbaude")
         self.git("config", "user.email", "sync-test@example.invalid")
         self.git("config", "core.autocrlf", "false")
         self.git("config", "protocol.allow", "never")
@@ -55,7 +55,7 @@ class SyncBranchTests(unittest.TestCase):
             self.git("init", "-q", "--bare", str(remote))
             self.git("config", f"url.{remote.as_posix()}.insteadOf", url)
             self.remotes[name] = remote
-        self.base = self.commit("initial")
+        self.base = self.commit("Sākotnējais komits")
 
     def git(self, *args):
         result = subprocess.run(["git", *args], cwd=self.repo, env=self.env,
@@ -94,7 +94,7 @@ class SyncBranchTests(unittest.TestCase):
         self.seed("github")
         self.assert_success(self.sync("to-azure"))
         self.assertEqual(self.tip("azure", "main"), self.base)
-        azure_change = self.commit("change made on Azure")
+        azure_change = self.commit("Izmaiņa Azure repozitorijā")
         self.seed("azure")
         self.assert_success(self.sync("to-github"))
         self.assertEqual(self.tip("github", "main"), azure_change)
@@ -118,7 +118,7 @@ class SyncBranchTests(unittest.TestCase):
                 self.assertEqual(self.tip(remote, "feature/auth"), self.base)
 
     def test_older_run_does_not_rewind_newer_target(self):
-        newer = self.commit("newer target")
+        newer = self.commit("Jaunāka mērķa versija")
         self.seed("github")
         self.git("checkout", "-q", "--detach", self.base)
         result = self.sync("to-github")
@@ -127,10 +127,10 @@ class SyncBranchTests(unittest.TestCase):
         self.assertEqual(self.tip("github", "main"), newer)
 
     def test_divergent_changes_fail_without_overwriting_target(self):
-        target_tip = self.commit("target change")
+        target_tip = self.commit("Izmaiņa mērķa repozitorijā")
         self.seed("azure")
         self.git("checkout", "-q", "--detach", self.base)
-        self.commit("independent source change")
+        self.commit("Neatkarīga izmaiņa avotā")
         result = self.sync("to-azure")
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("Branches diverged", result.stderr)

@@ -162,7 +162,7 @@ function Avatar({
 }
 
 function App() {
-  // Authentication
+  // Autentifikācija
   const [isAuthenticated, setIsAuthenticated] = useState(
     () => localStorage.getItem("blaze-auth") === "true"
   );
@@ -171,7 +171,7 @@ function App() {
     () => readStorage("blaze-user", null)
   );
 
-  // Theme
+  // Krāsu tēma
   const [theme, setTheme] = useState(
     () => localStorage.getItem("blaze-theme") || "dark"
   );
@@ -181,7 +181,7 @@ function App() {
     localStorage.setItem("blaze-theme", theme);
   }, [theme]);
 
-  // Profile
+  // Profils
   const [profile, setProfile] = useState(() => {
     const saved = readStorage("blaze-profile", null);
 
@@ -192,7 +192,7 @@ function App() {
     };
   });
 
-  // Chat
+  // Sarakste
   const [contacts] = useState(initialContacts);
   const [activeId, setActiveId] = useState(1);
 
@@ -203,7 +203,7 @@ function App() {
   const [draft, setDraft] = useState("");
   const [search, setSearch] = useState("");
 
-  // Interface
+  // Saskarne
   const [profileOpen, setProfileOpen] = useState(false);
   const [editOpen, setEditOpen] = useState(false);
   const [themeOpen, setThemeOpen] = useState(false);
@@ -219,7 +219,7 @@ function App() {
 
   const activeMessages = messages[activeId] || [];
 
-  // Persist profile and messages
+  // Profila un ziņojumu saglabāšana
   useEffect(() => {
     localStorage.setItem("blaze-profile", JSON.stringify(profile));
   }, [profile]);
@@ -228,7 +228,7 @@ function App() {
     localStorage.setItem("blaze-messages", JSON.stringify(messages));
   }, [messages]);
 
-  // WebSocket
+  // WebSocket savienojums
   useEffect(() => {
     if (!isAuthenticated) return;
 
@@ -264,7 +264,7 @@ function App() {
     window.setTimeout(() => setToast(""), 2600);
   }
 
-  // Demo authentication
+  // Demonstrācijas autentifikācija
   function handleLogin(user) {
     const normalizedUser = {
       ...defaultProfile,
@@ -285,8 +285,8 @@ function App() {
   }
 
   function handleRegister(user) {
-    // Demo-only account storage.
-    // Replace with your authenticated WebAPI later.
+    // Kontu glabāšana tikai demonstrācijas vajadzībām.
+    // Vēlāk jāaizstāj ar WebAPI, kas nodrošina autentifikāciju.
     const accounts = readStorage("blaze-accounts", []);
 
     const exists = accounts.some(
@@ -334,7 +334,7 @@ function App() {
     notify("You have signed out.");
   }
 
-  // Avatar upload
+  // Profila attēla augšupielāde
   function chooseAvatar(event) {
     const file = event.target.files?.[0];
 
@@ -365,7 +365,7 @@ function App() {
     event.target.value = "";
   }
 
-  // Send message
+  // Ziņojuma nosūtīšana
   function sendMessage(event) {
     event.preventDefault();
 
@@ -391,7 +391,7 @@ function App() {
     setDraft("");
   }
 
-  // Save profile
+  // Profila saglabāšana
   function saveProfile(event) {
     event.preventDefault();
 
@@ -435,7 +435,7 @@ function App() {
   return (
     <main className="app-shell">
 
-      {/* SIDEBAR */}
+      {/* SĀNU JOSLA */}
       <aside
         className={`sidebar ${
           mobileChat ? "sidebar-hidden-mobile" : ""
@@ -537,7 +537,7 @@ function App() {
           )}
         </div>
 
-        {/* SIDEBAR BOTTOM */}
+        {/* SĀNU JOSLAS APAKŠDAĻA */}
         <div className="sidebar-bottom">
 
           <div className="workspace-card">
@@ -631,7 +631,7 @@ function App() {
         </div>
       </aside>
 
-      {/* CHAT PANEL */}
+      {/* SARAKSTES PANELIS */}
       <section
         className={`chat-panel ${
           !mobileChat ? "chat-hidden-mobile" : ""
@@ -753,7 +753,7 @@ function App() {
           </div>
         </div>
 
-        {/* MESSAGE COMPOSER */}
+        {/* ZIŅOJUMA RAKSTĪŠANA */}
         <form className="composer" onSubmit={sendMessage}>
 
           <div className="composer-toolbar">
@@ -821,7 +821,7 @@ function App() {
 
       </section>
 
-      {/* EDIT PROFILE MODAL */}
+      {/* PROFILA REDIĢĒŠANAS DIALOGS */}
       {editOpen && (
         <div
           className="modal-backdrop"

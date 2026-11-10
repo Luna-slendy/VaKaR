@@ -1,15 +1,17 @@
 # VaKaR
-## Tīmekļa lietotne saziņai.
-### Sprint 2
+
+Tīmekļa lietotne saziņai.
+
+## Otrā sprinta darbu sadalījums
+
 - Reģistrācijas un pieteikšanās lapu dizains - Nikita.
 - Lietotāju reģistrācija un pieteikšanās - Dmitrijs.
 - Datubāze Azure un savienojums ar WebAPI - Stepan.
 
+## Lietotnes palaišana
 
-
-## Running the app
-
-The React app and its `package.json` are in the `Vakar` subfolder. From this repository's root, run:
+React lietotne un tās `package.json` atrodas apakšmapē `Vakar`.
+Repozitorija saknes mapē izpildi:
 
 ```powershell
 cd .\Vakar
@@ -17,13 +19,23 @@ npm ci
 npm run dev
 ```
 
-Open the local URL printed by Vite. To create a production build, run `npm run build` from the same `Vakar` folder. To preview that build, run `npm run preview`.
+Atver Vite izvadē norādīto lokālo adresi. Lai sagatavotu lietotni publicēšanai,
+mapē `Vakar` izpildi `npm run build`. Lai priekšskatītu sagatavoto versiju,
+izpildi `npm run preview`.
 
-Sprint 1:
-Lietotāju autentifikācija un autorizācija​
-    Lietotāja profila bilde
-Sprint 2:
-Personīgā sarakste​
+## Pirmā sprinta funkcijas
 
-link:
-https://mango-bay-05b07d210.2.azurestaticapps.net/
+- Lietotāju autentifikācija un autorizācija.
+- Lietotāja profila attēls.
+
+## Otrā sprinta funkcijas
+
+- Personīgā sarakste.
+
+## Publicētā vietne
+
+[Atvērt VaKaR](https://mango-bay-05b07d210.2.azurestaticapps.net/)
+
+## Repozitoriju sinhronizācija
+
+[GitHub ↔ Azure Repos: iestatīšana un zaru atbilstība](docs/repository-sync.md)

@@ -1,9 +1,9 @@
 const API_BASE = import.meta.env.VITE_API_BASE_URL || "";
 
 /**
- * Central place for WebAPI calls.
- * Add the OAuth access token from your auth client to Authorization: Bearer ...
- * Do not connect to Azure SQL/Cosmos DB directly from the browser.
+ * Vienota vieta WebAPI pieprasījumiem.
+ * Autentifikācijas klienta OAuth piekļuves pilnvara jāpievieno galvenē Authorization: Bearer ...
+ * No pārlūka neveido tiešu savienojumu ar Azure SQL vai Cosmos DB.
  */
 export async function apiRequest(path, options = {}) {
   if (!API_BASE) {
@@ -43,5 +43,5 @@ export async function uploadAvatar(file) {
     body: form,
   });
   if (!response.ok) throw new Error(`Avatar upload failed (${response.status})`);
-  return response.json(); // expected: { avatarUrl: "https://..." }
+  return response.json(); // Sagaidāmais formāts: { avatarUrl: "https://..." }
 }

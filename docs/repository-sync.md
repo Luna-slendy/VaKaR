@@ -53,6 +53,26 @@ Mainīgo `deployment_token` turpina izmantot vietnes publicēšanai.
 Vietnes būvēšana un publicēšana tiek palaista tikai Azure zarā `main`,
 bet sinhronizācija — visos zaros. Šie uzdevumi darbojas neatkarīgi.
 
+## Sākotnējā main vēstures apvienošana
+
+Ja pirms sinhronizācijas ieslēgšanas abos `main` zaros jau ir atsevišķi komiti,
+tie vienreiz jāapvieno. Ar YAML failu kopēšanu starp repozitorijiem nepietiek:
+kopīgajam komitam jāietver abu pušu vēsture.
+
+Iegūsti aktuālos `origin/main` (Azure) un `github/main` (GitHub). Izveido
+atsevišķu zaru no `origin/main` un apvieno tajā `github/main` ar parastu merge.
+Pēc konfliktu atrisināšanas nosūti šo zaru uz Azure un izveido izmaiņu
+apvienošanas pieprasījumu (pull request) zarā `main`.
+
+Pabeidzot pieprasījumu, izvēlies **Merge (no fast forward)**, lai saglabātu
+abas vēstures. Squash izveido jaunu komitu, nesaglabājot GitHub komitus tā
+vēsturē, tādēļ sinhronizācija var atkārtoti parādīt `Branches diverged`.
+
+Ja konflikts ir sinhronizācijas konfigurācijā, saglabā aktuālo darbplūsmu,
+kas izmanto `scripts/sync-branch.sh`. Divvirzienu sinhronizācijā zaram `main`
+jāatbilst otras puses zaram `main`. Iepriekšējais noteikums
+`main -> import/github-main` vairs netiek izmantots.
+
 ## Aizsardzība pret bezgalīgu ciklu
 
 Skripts pārbauda, vai nosūtāmais komits jau ir mērķa zarā. Ja tā SHA jau ir
@@ -84,6 +104,7 @@ Tās izmanto pagaidu Git repozitorijus bez piekļuves GitHub un Azure.
 ## Pakalpojumu dokumentācija
 
 - [Palaišanas nosacījumi un zara YAML fails Azure Repos](https://learn.microsoft.com/en-us/azure/devops/pipelines/repos/azure-repos-git)
+- [Apvienošanas pieprasījumu apvienošanas veidi Azure](https://learn.microsoft.com/en-us/azure/devops/repos/git/complete-pull-requests#complete-a-pull-request)
 - [Azure Pipelines slepenie mainīgie](https://learn.microsoft.com/en-us/azure/devops/pipelines/process/variables#secret-variables)
 - [GitHub personiskās piekļuves pilnvaras un fine-grained ierobežojumi](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens)
 - [Tiesības mainīt darbplūsmu failus](https://docs.github.com/en/rest/repos/contents#create-or-update-file-contents)

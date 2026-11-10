@@ -2,7 +2,7 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap');
 
 /* =========================================
-   THEME VARIABLES
+   KRĀSU TĒMU MAINĪGIE
 ========================================= */
 
 :root {
@@ -38,7 +38,7 @@
   --online: #27B879;
 }
 
-/* MIDNIGHT */
+/* PUSNAKTS TĒMA */
 
 :root[data-theme="dark"] {
   --bg: #0B1421;
@@ -61,7 +61,7 @@
   --accent-border: #FF570A45;
 }
 
-/* VIOLET */
+/* VIOLETĀ TĒMA */
 
 :root[data-theme="violet"] {
   --bg: #160D19;
@@ -84,7 +84,7 @@
   --accent-border: #FF570A45;
 }
 
-/* BLAZE */
+/* LIESMU TĒMA */
 
 :root[data-theme="blaze"] {
   --bg: #101C2B;
@@ -107,7 +107,7 @@
   --accent-border: #FF570A55;
 }
 
-/* CRIMSON */
+/* TUMŠSARKANĀ TĒMA */
 
 :root[data-theme="crimson"] {
   --bg: #180D19;
@@ -131,7 +131,7 @@
 }
 
 /* =========================================
-   GLOBAL
+   VISPĀRĪGIE STILI
 ========================================= */
 
 * {
@@ -167,7 +167,7 @@ button:disabled {
 }
 
 /* =========================================
-   APP LAYOUT
+   LIETOTNES IZKĀRTOJUMS
 ========================================= */
 
 .app-shell {
@@ -191,7 +191,7 @@ button:disabled {
 }
 
 /* =========================================
-   SIDEBAR
+   SĀNU JOSLA
 ========================================= */
 
 .sidebar {
@@ -279,7 +279,7 @@ button:disabled {
   margin-left: auto;
 }
 
-/* NEW CONVERSATION */
+/* JAUNA SARUNA */
 
 .new-chat-button {
   display: flex;
@@ -315,7 +315,7 @@ button:disabled {
   color: #FFFFFFB8;
 }
 
-/* SECTION LABEL */
+/* SADAĻAS NOSAUKUMS */
 
 .section-label {
   display: flex;
@@ -347,7 +347,7 @@ button:disabled {
   letter-spacing: 0;
 }
 
-/* SEARCH */
+/* MEKLĒŠANA */
 
 .search-box {
   height: 40px;
@@ -390,7 +390,7 @@ button:disabled {
   background: transparent;
 }
 
-/* CONTACT LIST */
+/* KONTAKTU SARAKSTS */
 
 .contact-list {
   display: flex;
@@ -509,7 +509,7 @@ button:disabled {
 }
 
 /* =========================================
-   AVATARS
+   PROFILA ATTĒLI
 ========================================= */
 
 .avatar {
@@ -596,7 +596,7 @@ button:disabled {
 }
 
 /* =========================================
-   SIDEBAR BOTTOM
+   SĀNU JOSLAS APAKŠDAĻA
 ========================================= */
 
 .sidebar-bottom {
@@ -700,7 +700,7 @@ button:disabled {
   font-size: 10px;
 }
 
-/* PROFILE MENU */
+/* PROFILA IZVĒLNE */
 
 .profile-popover {
   position: absolute;
@@ -785,7 +785,7 @@ button:disabled {
 }
 
 /* =========================================
-   CHAT PANEL
+   SARAKSTES PANELIS
 ========================================= */
 
 .chat-panel {
@@ -858,7 +858,7 @@ button:disabled {
 }
 
 /* =========================================
-   CONVERSATION
+   SARUNA
 ========================================= */
 
 .conversation {
@@ -984,7 +984,7 @@ button:disabled {
 }
 
 /* =========================================
-   COMPOSER
+   ZIŅOJUMA RAKSTĪŠANA
 ========================================= */
 
 .composer {
@@ -1111,7 +1111,7 @@ button:disabled {
 }
 
 /* =========================================
-   PROFILE MODAL
+   PROFILA DIALOGS
 ========================================= */
 
 .modal-backdrop {
@@ -1344,7 +1344,7 @@ button:disabled {
 }
 
 /* =========================================
-   TOAST
+   ĪSIE PAZIŅOJUMI
 ========================================= */
 
 .toast {
@@ -1398,7 +1398,7 @@ button:disabled {
 }
 
 /* =========================================
-   RESPONSIVE
+   PIELĀGOJUMI EKRĀNA IZMĒRAM
 ========================================= */
 
 @media (max-width: 850px) {
