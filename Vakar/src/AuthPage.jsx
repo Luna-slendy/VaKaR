@@ -1,5 +1,4 @@
 import { useState } from "react";
-
 import {
   Eye,
   EyeOff,
@@ -11,16 +10,153 @@ import {
   Check,
   ShieldCheck
 } from "lucide-react";
-
 import mascot from "./assets/blazy-mascot.gif";
+
+const authTranslations = {
+  en: {
+    language: "Language",
+    appearance: "Appearance",
+    chooseTheme: "CHOOSE YOUR THEME",
+    secure: "Secure space",
+    personalSpace: "YOUR PERSONAL SPACE",
+    conversations: "Conversations",
+    with: "with",
+    description:
+      "Connect with people, share ideas and keep everything in one place.",
+    tagline: "Your space. Your rules.",
+    private: "Private conversations",
+    ownAppearance: "Your own appearance",
+
+    welcome: "WELCOME BACK",
+    getStarted: "GET STARTED",
+    signIn: "Sign in",
+    createAccount: "Create account",
+
+    loginDescription: "Enter your details to access your space.",
+    registerDescription: "Join Vakar and create your personal space.",
+
+    firstName: "First name",
+    lastName: "Last name",
+    username: "Username",
+    email: "Email address",
+    password: "Password",
+    confirmPassword: "Confirm password",
+
+    firstNamePlaceholder: "First name",
+    lastNamePlaceholder: "Last name",
+    usernamePlaceholder: "your_username",
+    emailPlaceholder: "you@example.com",
+    passwordPlaceholder: "Enter your password",
+    confirmPlaceholder: "Repeat your password",
+
+    remember: "Remember me",
+    forgot: "Forgot password?",
+    terms: "I agree to the terms and privacy policy.",
+
+    wait: "Please wait...",
+    createOne: "Create one",
+    noAccount: "Don't have an account?",
+    hasAccount: "Already have an account?",
+
+    footer: "Your personal space starts here.",
+    copyright: "Made for meaningful conversations.",
+
+    showPassword: "Show password",
+    hidePassword: "Hide password",
+
+    completeFields: "Please complete all required fields.",
+    usernameLength: "Username must contain at least 3 characters.",
+    passwordLength: "Your password must contain at least 8 characters.",
+    passwordMismatch: "Passwords do not match.",
+    registrationFailed: "Registration failed.",
+    accountCreated: "Your account has been created!",
+    incorrectCredentials: "Incorrect email or password.",
+
+    accountExists: "An account with this email already exists.",
+    recovery:
+      "Password recovery needs to be configured in your WebAPI."
+  },
+
+  lv: {
+    language: "Valoda",
+    appearance: "Izskats",
+    chooseTheme: "IZVĒLIETIES MOTĪVU",
+    secure: "Droša vide",
+    personalSpace: "JŪSU PERSONĪGĀ VIDE",
+    conversations: "Sarunas",
+    with: "ar",
+    description:
+      "Sazinieties ar cilvēkiem, dalieties idejās un glabājiet visu vienuviet.",
+    tagline: "Jūsu vide. Jūsu noteikumi.",
+    private: "Privātas sarunas",
+    ownAppearance: "Jūsu izvēlētais izskats",
+
+    welcome: "LAIPNI ATGRIEZIES",
+    getStarted: "SĀKT",
+    signIn: "Pieteikties",
+    createAccount: "Izveidot kontu",
+
+    loginDescription: "Ievadiet savus datus, lai piekļūtu savai videi.",
+    registerDescription:
+      "Pievienojieties Vakar un izveidojiet savu personīgo vidi.",
+
+    firstName: "Vārds",
+    lastName: "Uzvārds",
+    username: "Lietotājvārds",
+    email: "E-pasta adrese",
+    password: "Parole",
+    confirmPassword: "Apstiprināt paroli",
+
+    firstNamePlaceholder: "Vārds",
+    lastNamePlaceholder: "Uzvārds",
+    usernamePlaceholder: "jūsu_lietotājvārds",
+    emailPlaceholder: "jusu.epasts@example.com",
+    passwordPlaceholder: "Ievadiet paroli",
+    confirmPlaceholder: "Atkārtojiet paroli",
+
+    remember: "Atcerēties mani",
+    forgot: "Aizmirsāt paroli?",
+    terms: "Es piekrītu lietošanas noteikumiem un privātuma politikai.",
+
+    wait: "Lūdzu, uzgaidiet...",
+    createOne: "Izveidot kontu",
+    noAccount: "Nav konta?",
+    hasAccount: "Jau ir konts?",
+
+    footer: "Jūsu personīgā vide sākas šeit.",
+    copyright: "Radīts jēgpilnām sarunām.",
+
+    showPassword: "Parādīt paroli",
+    hidePassword: "Paslēpt paroli",
+
+    completeFields: "Lūdzu, aizpildiet visus obligātos laukus.",
+    usernameLength: "Lietotājvārdam jāsatur vismaz 3 rakstzīmes.",
+    passwordLength: "Parolei jāsatur vismaz 8 rakstzīmes.",
+    passwordMismatch: "Paroles nesakrīt.",
+    registrationFailed: "Reģistrācija neizdevās.",
+    accountCreated: "Jūsu konts ir izveidots!",
+    incorrectCredentials: "Nepareizs e-pasts vai parole.",
+
+    accountExists: "Konts ar šo e-pasta adresi jau eksistē.",
+    recovery:
+      "Paroles atkopšana jākonfigurē jūsu WebAPI."
+  }
+};
 
 export default function AuthPage({
   theme,
   setTheme,
   themes,
+  language,
+  setLanguage,
   onLogin,
   onRegister
 }) {
+  const t = key =>
+    authTranslations[language]?.[key] ||
+    authTranslations.en[key] ||
+    key;
+
   const [mode, setMode] = useState("login");
   const [showPassword, setShowPassword] = useState(false);
   const [showThemePicker, setShowThemePicker] = useState(false);
@@ -69,25 +205,25 @@ export default function AuthPage({
         !form.lastName.trim() ||
         !form.username.trim()
       ) {
-        setError("Please complete all required fields.");
+        setError(t("completeFields"));
         setLoading(false);
         return;
       }
 
       if (form.username.trim().replace(/^@/, "").length < 3) {
-        setError("Username must contain at least 3 characters.");
+        setError(t("usernameLength"));
         setLoading(false);
         return;
       }
 
       if (form.password.length < 8) {
-        setError("Your password must contain at least 8 characters.");
+        setError(t("passwordLength"));
         setLoading(false);
         return;
       }
 
       if (form.password !== form.confirmPassword) {
-        setError("Passwords do not match.");
+        setError(t("passwordMismatch"));
         setLoading(false);
         return;
       }
@@ -101,12 +237,17 @@ export default function AuthPage({
       });
 
       if (!result?.success) {
-        setError(result?.message || "Registration failed.");
+        setError(
+          result?.message === "An account with this email already exists."
+            ? t("accountExists")
+            : result?.message || t("registrationFailed")
+        );
+
         setLoading(false);
         return;
       }
 
-      setSuccess("Your account has been created!");
+      setSuccess(t("accountCreated"));
       setLoading(false);
       return;
     }
@@ -153,16 +294,19 @@ export default function AuthPage({
       return;
     }
 
-    setError("Incorrect email or password.");
+    setError(t("incorrectCredentials"));
     setLoading(false);
   }
 
   return (
     <main className="auth-page">
+
       <div className="auth-decoration decoration-one" />
       <div className="auth-decoration decoration-two" />
 
+      {/* GALVENE */}
       <header className="auth-header">
+
         <div className="auth-brand">
           <div className="auth-brand-icon">
             <img src={mascot} alt="Vakar mascot" />
@@ -174,15 +318,32 @@ export default function AuthPage({
         </div>
 
         <div className="auth-header-right">
+
+          {/* VALODAS IZVĒLE */}
+          <div className="language-picker">
+            <select
+              value={language}
+              onChange={event => setLanguage(event.target.value)}
+              aria-label={t("language")}
+            >
+              <option value="en">🇬🇧 English</option>
+              <option value="lv">🇱🇻 Latviešu</option>
+            </select>
+          </div>
+
+          {/* KRĀSU TĒMAS IZVĒLE */}
           <div className="theme-picker-container">
+
             <button
               className="theme-picker-trigger"
-              onClick={() => setShowThemePicker(current => !current)}
+              onClick={() =>
+                setShowThemePicker(current => !current)
+              }
               type="button"
               aria-expanded={showThemePicker}
             >
               <Palette size={17} />
-              <span>Appearance</span>
+              <span>{t("appearance")}</span>
 
               <span
                 className="current-theme-dot"
@@ -195,8 +356,9 @@ export default function AuthPage({
 
             {showThemePicker && (
               <div className="theme-picker-menu">
+
                 <div className="theme-picker-heading">
-                  CHOOSE YOUR THEME
+                  {t("chooseTheme")}
                 </div>
 
                 {themes.map(item => (
@@ -220,9 +382,12 @@ export default function AuthPage({
 
                     <span>{item.name}</span>
 
-                    {theme === item.id && <Check size={15} />}
+                    {theme === item.id && (
+                      <Check size={15} />
+                    )}
                   </button>
                 ))}
+
               </div>
             )}
           </div>
@@ -231,31 +396,35 @@ export default function AuthPage({
 
           <span className="header-secure">
             <ShieldCheck size={16} />
-            Secure space
+            {t("secure")}
           </span>
+
         </div>
       </header>
 
+      {/* PAMATSATURS */}
       <section className="auth-content">
+
+        {/* IEVADS */}
         <div className="auth-intro">
+
           <span className="auth-eyebrow">
             <span className="eyebrow-dot" />
-            YOUR PERSONAL SPACE
+            {t("personalSpace")}
           </span>
 
           <h1>
-            Conversations
+            {t("conversations")}
             <br />
-            without <span>limits.</span>
+            {t("with")} <span>Vakar.</span>
           </h1>
 
           <p className="auth-description">
-            A calmer place for your conversations.
-            Connect with people, share ideas and keep
-            everything in one place.
+            {t("description")}
           </p>
 
           <div className="mascot-container">
+
             <img
               src={mascot}
               alt="Vakar mascot"
@@ -264,47 +433,61 @@ export default function AuthPage({
 
             <div className="mascot-label">
               <span className="mascot-status" />
-              Your space. Your rules.
+              {t("tagline")}
             </div>
+
           </div>
 
           <div className="auth-feature-list">
+
             <div>
               <ShieldCheck size={17} />
-              Private conversations
+              {t("private")}
             </div>
 
             <div>
               <Palette size={17} />
-              Your own appearance
+              {t("ownAppearance")}
             </div>
+
           </div>
+
         </div>
 
+        {/* AUTENTIFIKĀCIJAS PANELIS */}
         <div className="auth-card">
+
           <div className="auth-card-heading">
+
             <span className="auth-card-eyebrow">
-              {mode === "login" ? "WELCOME BACK" : "GET STARTED"}
+              {mode === "login"
+                ? t("welcome")
+                : t("getStarted")}
             </span>
 
             <h2>
-              {mode === "login" ? "Sign in" : "Create account"}
+              {mode === "login"
+                ? t("signIn")
+                : t("createAccount")}
             </h2>
 
             <p>
               {mode === "login"
-                ? "Enter your details to access your space."
-                : "Join Vakar and create your personal space."}
+                ? t("loginDescription")
+                : t("registerDescription")}
             </p>
+
           </div>
 
+          {/* AUTENTIFIKĀCIJAS CILNES */}
           <div className="auth-tabs">
+
             <button
               type="button"
               className={mode === "login" ? "active" : ""}
               onClick={() => switchMode("login")}
             >
-              Sign in
+              {t("signIn")}
             </button>
 
             <button
@@ -312,28 +495,44 @@ export default function AuthPage({
               className={mode === "register" ? "active" : ""}
               onClick={() => switchMode("register")}
             >
-              Create account
+              {t("createAccount")}
             </button>
+
           </div>
 
+          {/* KĻŪDA */}
           {error && (
-            <div className="auth-message auth-error" role="alert">
+            <div
+              className="auth-message auth-error"
+              role="alert"
+            >
               {error}
             </div>
           )}
 
+          {/* VEIKSMĪGAS DARBĪBAS PAZIŅOJUMS */}
           {success && (
-            <div className="auth-message auth-success" role="status">
+            <div
+              className="auth-message auth-success"
+              role="status"
+            >
               {success}
             </div>
           )}
 
-          <form className="auth-form" onSubmit={handleSubmit}>
+          {/* VEIDLAPA */}
+          <form
+            className="auth-form"
+            onSubmit={handleSubmit}
+          >
+
+            {/* REĢISTRĀCIJAS LAUKI */}
             {mode === "register" && (
               <>
                 <div className="auth-field-row">
+
                   <label className="auth-field">
-                    <span>First name</span>
+                    <span>{t("firstName")}</span>
 
                     <div className="auth-input-wrapper">
                       <UserRound size={17} />
@@ -342,7 +541,7 @@ export default function AuthPage({
                         name="firstName"
                         value={form.firstName}
                         onChange={updateField}
-                        placeholder="First name"
+                        placeholder={t("firstNamePlaceholder")}
                         autoComplete="given-name"
                         required
                       />
@@ -350,7 +549,7 @@ export default function AuthPage({
                   </label>
 
                   <label className="auth-field">
-                    <span>Last name</span>
+                    <span>{t("lastName")}</span>
 
                     <div className="auth-input-wrapper">
                       <UserRound size={17} />
@@ -359,16 +558,17 @@ export default function AuthPage({
                         name="lastName"
                         value={form.lastName}
                         onChange={updateField}
-                        placeholder="Last name"
+                        placeholder={t("lastNamePlaceholder")}
                         autoComplete="family-name"
                         required
                       />
                     </div>
                   </label>
+
                 </div>
 
                 <label className="auth-field">
-                  <span>Username</span>
+                  <span>{t("username")}</span>
 
                   <div className="auth-input-wrapper">
                     <span className="username-prefix">@</span>
@@ -377,7 +577,7 @@ export default function AuthPage({
                       name="username"
                       value={form.username}
                       onChange={updateField}
-                      placeholder="your_username"
+                      placeholder={t("usernamePlaceholder")}
                       minLength={3}
                       maxLength={30}
                       autoComplete="username"
@@ -385,11 +585,13 @@ export default function AuthPage({
                     />
                   </div>
                 </label>
+
               </>
             )}
 
+            {/* E-PASTS */}
             <label className="auth-field">
-              <span>Email address</span>
+              <span>{t("email")}</span>
 
               <div className="auth-input-wrapper">
                 <Mail size={17} />
@@ -399,15 +601,16 @@ export default function AuthPage({
                   name="email"
                   value={form.email}
                   onChange={updateField}
-                  placeholder="you@example.com"
+                  placeholder={t("emailPlaceholder")}
                   autoComplete="email"
                   required
                 />
               </div>
             </label>
 
+            {/* PAROLE */}
             <label className="auth-field">
-              <span>Password</span>
+              <span>{t("password")}</span>
 
               <div className="auth-input-wrapper">
                 <Lock size={17} />
@@ -417,7 +620,7 @@ export default function AuthPage({
                   name="password"
                   value={form.password}
                   onChange={updateField}
-                  placeholder="Enter your password"
+                  placeholder={t("passwordPlaceholder")}
                   autoComplete={
                     mode === "login"
                       ? "current-password"
@@ -429,21 +632,27 @@ export default function AuthPage({
                 <button
                   type="button"
                   className="password-toggle"
-                  onClick={() => setShowPassword(current => !current)}
+                  onClick={() =>
+                    setShowPassword(current => !current)
+                  }
                   aria-label={
-                    showPassword ? "Hide password" : "Show password"
+                    showPassword
+                      ? t("hidePassword")
+                      : t("showPassword")
                   }
                 >
                   {showPassword
                     ? <EyeOff size={17} />
                     : <Eye size={17} />}
                 </button>
+
               </div>
             </label>
 
+            {/* PAROLES APSTIPRINĀŠANA */}
             {mode === "register" && (
               <label className="auth-field">
-                <span>Confirm password</span>
+                <span>{t("confirmPassword")}</span>
 
                 <div className="auth-input-wrapper">
                   <Lock size={17} />
@@ -453,7 +662,7 @@ export default function AuthPage({
                     name="confirmPassword"
                     value={form.confirmPassword}
                     onChange={updateField}
-                    placeholder="Repeat your password"
+                    placeholder={t("confirmPlaceholder")}
                     autoComplete="new-password"
                     required
                   />
@@ -461,8 +670,10 @@ export default function AuthPage({
               </label>
             )}
 
+            {/* PIETEIKŠANĀS IESPĒJAS */}
             {mode === "login" && (
               <div className="auth-form-options">
+
                 <label className="remember-option">
                   <input
                     type="checkbox"
@@ -470,73 +681,86 @@ export default function AuthPage({
                     checked={form.remember}
                     onChange={updateField}
                   />
-                  <span>Remember me</span>
+
+                  <span>{t("remember")}</span>
                 </label>
 
                 <button
                   type="button"
                   className="forgot-password"
                   onClick={() =>
-                    setError(
-                      "Password recovery needs to be configured in your WebAPI."
-                    )
+                    setError(t("recovery"))
                   }
                 >
-                  Forgot password?
+                  {t("forgot")}
                 </button>
+
               </div>
             )}
 
+            {/* REĢISTRĀCIJAS NOTEIKUMI */}
             {mode === "register" && (
               <label className="remember-option terms-option">
                 <input type="checkbox" required />
-                <span>
-                  I agree to the terms and privacy policy.
-                </span>
+
+                <span>{t("terms")}</span>
               </label>
             )}
 
+            {/* IESNIEGŠANA */}
             <button
               className="auth-submit"
               type="submit"
               disabled={loading}
             >
               {loading
-                ? "Please wait..."
+                ? t("wait")
                 : mode === "login"
-                  ? "Sign in"
-                  : "Create account"}
+                  ? t("signIn")
+                  : t("createAccount")}
 
               {!loading && <ArrowRight size={18} />}
             </button>
+
           </form>
 
+          {/* REŽĪMA MAIŅA */}
           <div className="auth-switch">
+
             {mode === "login"
-              ? "Don't have an account?"
-              : "Already have an account?"}
+              ? t("noAccount")
+              : t("hasAccount")}
 
             <button
               type="button"
               onClick={() =>
-                switchMode(mode === "login" ? "register" : "login")
+                switchMode(
+                  mode === "login" ? "register" : "login"
+                )
               }
             >
-              {mode === "login" ? "Create one" : "Sign in"}
+              {mode === "login"
+                ? t("createOne")
+                : t("signIn")}
             </button>
+
           </div>
 
+          {/* PANEĻA KĀJENE */}
           <div className="auth-card-footer">
             <ShieldCheck size={15} />
-            Your personal space starts here.
+            {t("footer")}
           </div>
+
         </div>
       </section>
 
+      {/* LAPAS KĀJENE */}
       <footer className="auth-footer">
         <span>© {new Date().getFullYear()} Vakar</span>
-        <span>Made for meaningful conversations.</span>
+        <span>{t("copyright")}</span>
       </footer>
+
     </main>
   );
 }
