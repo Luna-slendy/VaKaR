@@ -857,3 +857,22 @@
     transition-duration: .01ms !important;
   }
 }
+
+
+.language-picker select {
+  font: inherit;
+  color: inherit;
+  background: var(--input-bg, transparent);
+  border: 1px solid var(--border-color, #88888844);
+  cursor: pointer;
+  outline: none;
+}
+
+.language-picker select:focus {
+  border-color: #ff570a;
+}
+
+.language-picker option {
+  background: #ffffff;
+  color: #222222;
+}

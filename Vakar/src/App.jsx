@@ -1,13 +1,10 @@
-
 import { useEffect, useRef, useState } from "react";
-
 import {
   Search, Plus, MoreHorizontal, Paperclip, Smile, Send,
-  ImagePlus, Settings, LogOut, UserRound, CheckCheck,
-  MessageCircle, ArrowLeft, X, Camera, ShieldCheck,
+  ImagePlus, LogOut, UserRound, CheckCheck,
+  ArrowLeft, X, Camera, ShieldCheck,
   Palette, ChevronDown
 } from "lucide-react";
-
 import AuthPage from "./AuthPage.jsx";
 import mascot from "./assets/blazy-mascot.gif";
 import { connectChatSocket } from "./services/socket.js";
@@ -19,6 +16,129 @@ const THEMES = [
   { id: "blaze", name: "Blaze", color: "#FF570A" },
   { id: "crimson", name: "Crimson", color: "#D72638" }
 ];
+
+const translations = {
+  en: {
+    language: "Language",
+    appearance: "Appearance",
+    newChat: "New conversation",
+    messages: "MESSAGES",
+    search: "Search conversations",
+    noConversations: "No conversations found.",
+    private: "Private",
+    secured: "Secured and encrypted",
+    editProfile: "Edit profile",
+    signOut: "Sign out",
+    active: "Active now",
+    lastSeen: "Last seen recently",
+    today: "TODAY",
+    firstName: "First name",
+    lastName: "Last name",
+    username: "Username",
+    email: "Email address",
+    cancel: "Cancel",
+    save: "Save changes",
+    changePicture: "Change picture",
+    profilePicture: "Your profile picture",
+    pictureFormats: "JPG, PNG or GIF · up to 4 MB",
+    close: "Close",
+    send: "Send message",
+    message: "Message",
+    demoMode: "Demo mode",
+    connected: "Connected",
+    welcome: "Welcome back!",
+    signedOut: "You have signed out.",
+    profileSaved: "Profile saved.",
+    pictureUpdated: "Profile picture updated.",
+    invalidImage: "Please choose an image file.",
+    largeImage: "Choose an image smaller than 4 MB.",
+    newChatError: "Connect the WebAPI to start a new conversation.",
+    chatSearchError: "Chat search can be connected to the WebAPI.",
+    optionsPlaceholder: "Conversation options placeholder.",
+    uploadError: "File uploads can be added through the WebAPI.",
+    imageError: "Image sharing can be added through the WebAPI.",
+    accountTitle: "YOUR ACCOUNT",
+    securityNote: "Password and email security changes belong in the authenticated WebAPI.",
+    moreOptions: "More options",
+    clearSearch: "Clear search",
+    back: "Back to conversations",
+    searchChat: "Search chat",
+    chatOptions: "More chat options",
+    attach: "Attach file",
+    addImage: "Add image",
+    emoji: "Emoji",
+    pressEnter: "Press",
+    toSend: "to send",
+    yesterday: "Yesterday",
+    messagePlaceholder: "Message",
+    welcomeBack: "Welcome back!",
+    accountExists: "An account with this email already exists.",
+    registrationFailed: "Registration failed.",
+    nameRequired: "Please complete all required fields.",
+    avatarAlt: "profile",
+    cancel: "Cancel"
+  },
+
+  lv: {
+    language: "Valoda",
+    appearance: "Izskats",
+    newChat: "Jauna saruna",
+    messages: "ZIŅOJUMI",
+    search: "Meklēt sarunas",
+    noConversations: "Sarunas nav atrastas.",
+    private: "Privāti",
+    secured: "Aizsargāts un šifrēts",
+    editProfile: "Rediģēt profilu",
+    signOut: "Izrakstīties",
+    active: "Aktīvs/-a tagad",
+    lastSeen: "Pēdējo reizi redzēts/-a nesen",
+    today: "ŠODIEN",
+    firstName: "Vārds",
+    lastName: "Uzvārds",
+    username: "Lietotājvārds",
+    email: "E-pasta adrese",
+    cancel: "Atcelt",
+    save: "Saglabāt izmaiņas",
+    changePicture: "Mainīt attēlu",
+    profilePicture: "Jūsu profila attēls",
+    pictureFormats: "JPG, PNG vai GIF · līdz 4 MB",
+    close: "Aizvērt",
+    send: "Nosūtīt ziņojumu",
+    message: "Ziņojums",
+    demoMode: "Demonstrācijas režīms",
+    connected: "Savienots",
+    welcome: "Prieks tevi atkal redzēt!",
+    signedOut: "Jūs esat izrakstījies/-usies.",
+    profileSaved: "Profils ir saglabāts.",
+    pictureUpdated: "Profila attēls ir atjaunināts.",
+    invalidImage: "Lūdzu, izvēlieties attēla failu.",
+    largeImage: "Izvēlieties attēlu, kas ir mazāks par 4 MB.",
+    newChatError: "Pievienojiet WebAPI, lai sāktu jaunu sarunu.",
+    chatSearchError: "Sarunas meklēšanu var pieslēgt WebAPI.",
+    optionsPlaceholder: "Sarunas opciju vietturis.",
+    uploadError: "Failu augšupielādi var pievienot, izmantojot WebAPI.",
+    imageError: "Attēlu kopīgošanu var pievienot, izmantojot WebAPI.",
+    accountTitle: "JŪSU KONTS",
+    securityNote: "Paroles un e-pasta drošības izmaiņas jāveic autentificētajā WebAPI.",
+    moreOptions: "Papildu opcijas",
+    clearSearch: "Notīrīt meklēšanu",
+    back: "Atpakaļ uz sarunām",
+    searchChat: "Meklēt sarunā",
+    chatOptions: "Citas sarunas opcijas",
+    attach: "Pievienot failu",
+    addImage: "Pievienot attēlu",
+    emoji: "Emocijzīmes",
+    pressEnter: "Nospiediet",
+    toSend: "lai nosūtītu",
+    yesterday: "Vakar",
+    messagePlaceholder: "Ziņojums",
+    welcomeBack: "Prieks tevi atkal redzēt!",
+    accountExists: "Konts ar šo e-pasta adresi jau eksistē.",
+    registrationFailed: "Reģistrācija neizdevās.",
+    nameRequired: "Lūdzu, aizpildiet visus obligātos laukus.",
+    avatarAlt: "profils"
+  }
+};
 
 const initialContacts = [
   {
@@ -115,10 +235,10 @@ const initialMessages = {
 };
 
 const defaultProfile = {
-  firstName: "Luna",
-  lastName: "Slendy",
-  username: "luna_slendy",
-  email: "luna@example.com",
+  firstName: "guest",
+  lastName: "guest junior",
+  username: "guest",
+  email: "guest@gmail.com",
   avatar: ""
 };
 
@@ -162,6 +282,18 @@ function Avatar({
 }
 
 function App() {
+  // Language
+  const [language, setLanguage] = useState(
+    () => localStorage.getItem("blaze-language") || "en"
+  );
+
+  const t = key => translations[language]?.[key] || translations.en[key] || key;
+
+  useEffect(() => {
+    localStorage.setItem("blaze-language", language);
+    document.documentElement.lang = language;
+  }, [language]);
+
   // Authentication
   const [isAuthenticated, setIsAuthenticated] = useState(
     () => localStorage.getItem("blaze-auth") === "true"
@@ -219,7 +351,6 @@ function App() {
 
   const activeMessages = messages[activeId] || [];
 
-  // Persist profile and messages
   useEffect(() => {
     localStorage.setItem("blaze-profile", JSON.stringify(profile));
   }, [profile]);
@@ -228,7 +359,7 @@ function App() {
     localStorage.setItem("blaze-messages", JSON.stringify(messages));
   }, [messages]);
 
-  // WebSocket
+
   useEffect(() => {
     if (!isAuthenticated) return;
 
@@ -264,7 +395,7 @@ function App() {
     window.setTimeout(() => setToast(""), 2600);
   }
 
-  // Demo authentication
+
   function handleLogin(user) {
     const normalizedUser = {
       ...defaultProfile,
@@ -281,12 +412,10 @@ function App() {
       JSON.stringify(normalizedUser)
     );
 
-    notify("Welcome back!");
+    notify(t("welcome"));
   }
 
   function handleRegister(user) {
-    // Demo-only account storage.
-    // Replace with your authenticated WebAPI later.
     const accounts = readStorage("blaze-accounts", []);
 
     const exists = accounts.some(
@@ -297,7 +426,7 @@ function App() {
     if (exists) {
       return {
         success: false,
-        message: "An account with this email already exists."
+        message: t("accountExists")
       };
     }
 
@@ -331,7 +460,7 @@ function App() {
     setEditOpen(false);
     setMobileChat(false);
 
-    notify("You have signed out.");
+    notify(t("signedOut"));
   }
 
   // Avatar upload
@@ -341,12 +470,12 @@ function App() {
     if (!file) return;
 
     if (!file.type.startsWith("image/")) {
-      notify("Please choose an image file.");
+      notify(t("invalidImage"));
       return;
     }
 
     if (file.size > 4 * 1024 * 1024) {
-      notify("Choose an image smaller than 4 MB.");
+      notify(t("largeImage"));
       return;
     }
 
@@ -358,7 +487,7 @@ function App() {
         avatar: String(reader.result)
       }));
 
-      notify("Profile picture updated.");
+      notify(t("pictureUpdated"));
     };
 
     reader.readAsDataURL(file);
@@ -411,7 +540,7 @@ function App() {
     localStorage.setItem("blaze-user", JSON.stringify(updated));
 
     setEditOpen(false);
-    notify("Profile saved.");
+    notify(t("profileSaved"));
   }
 
   const filteredContacts = contacts.filter(contact =>
@@ -426,6 +555,9 @@ function App() {
         theme={theme}
         setTheme={setTheme}
         themes={THEMES}
+        language={language}
+        setLanguage={setLanguage}
+        t={t}
         onLogin={handleLogin}
         onRegister={handleRegister}
       />
@@ -453,7 +585,7 @@ function App() {
 
           <button
             className="icon-button sidebar-more"
-            aria-label="More options"
+            aria-label={t("moreOptions")}
             onClick={() => setProfileOpen(!profileOpen)}
           >
             <MoreHorizontal />
@@ -462,17 +594,15 @@ function App() {
 
         <button
           className="new-chat-button"
-          onClick={() =>
-            notify("Connect the WebAPI to start a new conversation.")
-          }
+          onClick={() => notify(t("newChatError"))}
         >
           <Plus size={18} />
-          New conversation
+          {t("newChat")}
           <span>⌘ K</span>
         </button>
 
         <div className="section-label">
-          MESSAGES <span>{contacts.length}</span>
+          {t("messages")} <span>{contacts.length}</span>
         </div>
 
         <label className="search-box">
@@ -481,14 +611,14 @@ function App() {
           <input
             value={search}
             onChange={event => setSearch(event.target.value)}
-            placeholder="Search conversations"
+            placeholder={t("search")}
           />
 
           {search && (
             <button
               type="button"
               onClick={() => setSearch("")}
-              aria-label="Clear search"
+              aria-label={t("clearSearch")}
             >
               <X size={14} />
             </button>
@@ -516,7 +646,11 @@ function App() {
               <span className="contact-copy">
                 <span className="contact-top">
                   <strong>{contact.name}</strong>
-                  <time>{contact.time}</time>
+                  <time>
+                    {contact.time === "Yesterday"
+                      ? t("yesterday")
+                      : contact.time}
+                  </time>
                 </span>
 
                 <span className="contact-bottom">
@@ -532,7 +666,7 @@ function App() {
 
           {filteredContacts.length === 0 && (
             <p className="empty-search">
-              No conversations found.
+              {t("noConversations")}
             </p>
           )}
         </div>
@@ -546,8 +680,8 @@ function App() {
             </div>
 
             <div>
-              <strong>Your space</strong>
-              <span>Private & secure</span>
+              <strong>{t("private")}</strong>
+              <span>{t("secured")}</span>
             </div>
 
             <span className="workspace-status" />
@@ -578,6 +712,35 @@ function App() {
           {profileOpen && (
             <div className="profile-popover">
 
+              {/* LANGUAGE */}
+              <div className="language-picker" style={{ padding: "8px 12px" }}>
+                <label
+                  htmlFor="app-language"
+                  style={{
+                    display: "block",
+                    fontSize: "0.75rem",
+                    opacity: 0.7,
+                    marginBottom: 6
+                  }}
+                >
+                  {t("language")}
+                </label>
+
+                <select
+                  id="app-language"
+                  value={language}
+                  onChange={event => setLanguage(event.target.value)}
+                  style={{
+                    width: "100%",
+                    padding: "7px",
+                    borderRadius: 8
+                  }}
+                >
+                  <option value="en">🇬🇧 English</option>
+                  <option value="lv">🇱🇻 Latviešu</option>
+                </select>
+              </div>
+
               <button
                 onClick={() => {
                   setEditOpen(true);
@@ -585,16 +748,12 @@ function App() {
                 }}
               >
                 <UserRound size={16} />
-                Edit profile
+                {t("editProfile")}
               </button>
 
-              <button
-                onClick={() => {
-                  setThemeOpen(!themeOpen);
-                }}
-              >
+              <button onClick={() => setThemeOpen(!themeOpen)}>
                 <Palette size={16} />
-                Appearance
+                {t("appearance")}
                 <ChevronDown size={14} />
               </button>
 
@@ -623,7 +782,7 @@ function App() {
 
               <button onClick={handleLogout}>
                 <LogOut size={16} />
-                Sign out
+                {t("signOut")}
               </button>
 
             </div>
@@ -642,7 +801,7 @@ function App() {
 
           <button
             className="icon-button mobile-back"
-            aria-label="Back to conversations"
+            aria-label={t("back")}
             onClick={() => setMobileChat(false)}
           >
             <ArrowLeft />
@@ -665,28 +824,24 @@ function App() {
               />
 
               {activeContact.online
-                ? "Active now"
-                : "Last seen recently"}
+                ? t("active")
+                : t("lastSeen")}
             </span>
           </div>
 
           <div className="header-actions">
             <button
               className="icon-button"
-              aria-label="Search chat"
-              onClick={() =>
-                notify("Chat search can be connected to the WebAPI.")
-              }
+              aria-label={t("searchChat")}
+              onClick={() => notify(t("chatSearchError"))}
             >
               <Search />
             </button>
 
             <button
               className="icon-button"
-              aria-label="More chat options"
-              onClick={() =>
-                notify("Conversation options placeholder.")
-              }
+              aria-label={t("chatOptions")}
+              onClick={() => notify(t("optionsPlaceholder"))}
             >
               <MoreHorizontal />
             </button>
@@ -697,7 +852,7 @@ function App() {
 
           <div className="date-divider">
             <span />
-            <p>TODAY</p>
+            <p>{t("today")}</p>
             <span />
           </div>
 
@@ -760,10 +915,8 @@ function App() {
             <button
               type="button"
               className="tool-button"
-              aria-label="Attach file"
-              onClick={() =>
-                notify("File uploads can be added through the WebAPI.")
-              }
+              aria-label={t("attach")}
+              onClick={() => notify(t("uploadError"))}
             >
               <Paperclip size={19} />
             </button>
@@ -771,10 +924,8 @@ function App() {
             <button
               type="button"
               className="tool-button"
-              aria-label="Add image"
-              onClick={() =>
-                notify("Image sharing can be added through the WebAPI.")
-              }
+              aria-label={t("addImage")}
+              onClick={() => notify(t("imageError"))}
             >
               <ImagePlus size={19} />
             </button>
@@ -783,14 +934,14 @@ function App() {
           <input
             value={draft}
             onChange={event => setDraft(event.target.value)}
-            placeholder={`Message ${activeContact.name.split(" ")[0]}...`}
-            aria-label="Message text"
+            placeholder={`${t("message")} ${activeContact.name.split(" ")[0]}...`}
+            aria-label={t("message")}
           />
 
           <button
             type="button"
             className="tool-button emoji-button"
-            aria-label="Emoji"
+            aria-label={t("emoji")}
             onClick={() => setDraft(value => value + " ✨")}
           >
             <Smile size={19} />
@@ -800,7 +951,7 @@ function App() {
             type="submit"
             className="send-button"
             disabled={!draft.trim()}
-            aria-label="Send message"
+            aria-label={t("send")}
           >
             <Send size={17} />
           </button>
@@ -808,14 +959,14 @@ function App() {
         </form>
 
         <div className="composer-hint">
-          Press <kbd>Enter</kbd> to send
+          {t("pressEnter")} <kbd>Enter</kbd> {t("toSend")}
           <span>•</span>
           <span className="connection-indicator" />
 
           {socketStatus === "demo"
-            ? "Demo mode"
+            ? t("demoMode")
             : socketStatus === "online"
-              ? "Connected"
+              ? t("connected")
               : socketStatus}
         </div>
 
@@ -840,14 +991,16 @@ function App() {
 
             <div className="modal-heading">
               <div>
-                <span className="eyebrow">YOUR ACCOUNT</span>
-                <h2 id="profile-title">Edit profile</h2>
+                <span className="eyebrow">
+                  {t("accountTitle")}
+                </span>
+                <h2 id="profile-title">{t("editProfile")}</h2>
               </div>
 
               <button
                 className="icon-button"
                 onClick={() => setEditOpen(false)}
-                aria-label="Close"
+                aria-label={t("close")}
               >
                 <X />
               </button>
@@ -862,8 +1015,8 @@ function App() {
               />
 
               <div>
-                <strong>Your profile picture</strong>
-                <p>JPG, PNG or GIF · up to 4 MB</p>
+                <strong>{t("profilePicture")}</strong>
+                <p>{t("pictureFormats")}</p>
 
                 <button
                   type="button"
@@ -871,7 +1024,7 @@ function App() {
                   onClick={() => fileInput.current?.click()}
                 >
                   <Camera size={15} />
-                  Change picture
+                  {t("changePicture")}
                 </button>
 
                 <input
@@ -891,7 +1044,7 @@ function App() {
 
               <div className="field-pair">
                 <label>
-                  First name
+                  {t("firstName")}
                   <input
                     name="firstName"
                     required
@@ -901,7 +1054,7 @@ function App() {
                 </label>
 
                 <label>
-                  Last name
+                  {t("lastName")}
                   <input
                     name="lastName"
                     required
@@ -912,7 +1065,7 @@ function App() {
               </div>
 
               <label>
-                Username
+                {t("username")}
                 <div className="input-prefix">
                   <span>@</span>
                   <input
@@ -926,7 +1079,7 @@ function App() {
               </label>
 
               <label>
-                Email address
+                {t("email")}
                 <input
                   name="email"
                   type="email"
@@ -937,8 +1090,7 @@ function App() {
 
               <p className="form-note">
                 <ShieldCheck size={15} />
-                Password and email security changes belong in
-                the authenticated WebAPI.
+                {t("securityNote")}
               </p>
 
               <div className="modal-actions">
@@ -947,14 +1099,14 @@ function App() {
                   className="cancel-button"
                   onClick={() => setEditOpen(false)}
                 >
-                  Cancel
+                  {t("cancel")}
                 </button>
 
                 <button
                   type="submit"
                   className="save-button"
                 >
-                  Save changes
+                  {t("save")}
                 </button>
               </div>
 
