@@ -235,10 +235,10 @@ const initialMessages = {
 };
 
 const defaultProfile = {
-  firstName: "Luna",
-  lastName: "Slendy",
-  username: "luna_slendy",
-  email: "luna@example.com",
+  firstName: "guest",
+  lastName: "guest junior",
+  username: "guest",
+  email: "guest@gmail.com",
   avatar: ""
 };
 
@@ -351,7 +351,6 @@ function App() {
 
   const activeMessages = messages[activeId] || [];
 
-  // Persist profile and messages
   useEffect(() => {
     localStorage.setItem("blaze-profile", JSON.stringify(profile));
   }, [profile]);
@@ -360,7 +359,7 @@ function App() {
     localStorage.setItem("blaze-messages", JSON.stringify(messages));
   }, [messages]);
 
-  // WebSocket
+
   useEffect(() => {
     if (!isAuthenticated) return;
 
@@ -396,7 +395,7 @@ function App() {
     window.setTimeout(() => setToast(""), 2600);
   }
 
-  // Demo authentication
+
   function handleLogin(user) {
     const normalizedUser = {
       ...defaultProfile,
