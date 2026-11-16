@@ -12,3 +12,10 @@ CREATE TABLE posts (
     body       TEXT,
     created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
+
+--masha
+CREATE TABLE chats (
+    id SERIAL PRIMARY KEY,
+    name TEXT,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
