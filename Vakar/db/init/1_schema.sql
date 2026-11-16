@@ -19,3 +19,11 @@ CREATE TABLE chats (
     name TEXT,
     created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
+
+
+CREATE TABLE chat_members (
+    id SERIAL PRIMARY KEY,
+    chat_id INT NOT NULL REFERENCES chats(id) ON DELETE CASCADE,
+    user_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    UNIQUE(chat_id, user_id)
+);
