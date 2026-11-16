@@ -32,6 +32,6 @@ CREATE TABLE messages (
     id SERIAL PRIMARY KEY,
     chat_id INT NOT NULL REFERENCES chats(id) ON DELETE CASCADE,
     user_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-    content TEXT NOT NULL,
+    content TEXT NOT NULL CHECK (length(trim(content)) > 0),
     created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
