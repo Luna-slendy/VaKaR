@@ -38,3 +38,7 @@ CREATE TABLE messages (
 
 CREATE INDEX idx_messages_chat_id
 ON messages(chat_id);
+
+
+CREATE INDEX idx_chat_members_user_id
+ON chat_members(user_id);
