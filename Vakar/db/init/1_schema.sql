@@ -35,3 +35,6 @@ CREATE TABLE messages (
     content TEXT NOT NULL CHECK (length(trim(content)) > 0),
     created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
+
+CREATE INDEX idx_messages_chat_id
+ON messages(chat_id);
