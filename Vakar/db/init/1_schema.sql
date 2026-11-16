@@ -34,6 +34,8 @@ CREATE TABLE messages (
     user_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     content TEXT NOT NULL CHECK (length(trim(content)) > 0),
     created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+    FOREIGN KEY (chat_id, user_id)
+    REFERENCES chat_members(chat_id, user_id)
 );
 
 CREATE INDEX idx_messages_chat_id
